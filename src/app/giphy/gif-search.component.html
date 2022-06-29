@@ -1,0 +1,88 @@
+<div class="search-page container">
+  <div class="row mt-2">
+    <div class="col-1">
+      <a href="#" class="btn btn-primary" type="button">
+        Home
+      </a>
+    </div>
+    <div class="col-11">
+      <h3 class="text-center">Giphy API Test</h3>
+    </div>
+  </div>
+
+  <form [formGroup]="gifSearchForm" (ngSubmit)="onSearch()" aria-labelledby="title" *ngIf="gifSearchForm">
+    <div class="row mt-4">
+      <div class="col-4 offset-2">
+        <div class="ng-autocomplete" [ngClass]="{ 'is-invalid': (isFormSubmitted && gifSearchForm.controls['inputText'].errors)}">
+          <ng-autocomplete formControlName="inputText"
+                           placeholder="Enter gif description to search"
+                           [data]="searchSuggestions"
+                           [searchKeyword]="'name'"
+                           (selected)='selectEvent($event)'
+                           (inputChanged)='onChangeSearch($event)'
+                           [itemTemplate]="itemTemplate"
+                           [notFoundTemplate]="notFoundTemplate">
+          </ng-autocomplete>
+
+          <ng-template #itemTemplate let-item>
+            <a [innerHTML]="item.name"></a>
+          </ng-template>
+
+          <ng-template #notFoundTemplate let-notFound>
+            <div [innerHTML]="notFound"></div>
+          </ng-template>
+        </div>
+
+
+
+        <div class="invalid-feedback" *ngIf="(isFormSubmitted && gifSearchForm.controls['inputText'].errors)">
+          <div *ngIf="gifSearchForm.controls['inputText'].errors['required']">Description is required</div>
+        </div>
+
+        <div class="invalid-feedback" *ngIf="(isFormSubmitted && gifSearchForm.controls['inputText'].errors)">
+          <div *ngIf="gifSearchForm.controls['inputText'].errors['minlength']">Description is too short</div>
+        </div>
+      </div>
+      
+      <div class="col-4">
+        <button type="submit" class="btn btn-primary">Search</button>
+      </div>
+      
+    </div>
+  </form>
+
+  <div>
+    <p *ngIf="inputText"
+       class="text-primary h5 mt-2">
+      Showing result for "{{inputText}}" ({{_paginateionConfig.TotalRecords}})
+    </p>
+  </div>
+
+  <div>
+
+
+    <div class="row mt-4">
+      <div *ngFor="let item of _gifData | paginate: { itemsPerPage: _paginateionConfig.PerPageRecord, currentPage: _paginateionConfig.CurrentPage, totalItems: _paginateionConfig.TotalRecords }" class="col-3 ml-1">
+        <div class="card">
+          <div class="card-body text-center">
+            <img src="{{item.img_url}}}" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="">
+    <pagination-controls [ngClass]="{ 'd-none': _paginateionConfig.TotalRecords == undefined || _paginateionConfig.TotalRecords < 1}"
+                         (pageChange)="getPage(_paginateionConfig.CurrentPage = $event)">
+    </pagination-controls>
+  </div>
+
+
+</div>
+
+
+
+<!--        <input type="text" formControlName="inputText" class="form-control" placeholder="Enter gif description to search"
+               [ngClass]="{ 'is-invalid': (isFormSubmitted && gifSearchForm.controls['inputText'].errors)}">-->

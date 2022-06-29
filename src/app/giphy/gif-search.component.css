@@ -1,0 +1,13 @@
+body {
+  background-color: bisque !important;
+  font-family: Verdana, sans-serif;
+}
+
+.card img {
+  height: 230px;
+  width: 230px;
+}
+
+.ng-autocomplete {
+  width: 400px;
+}
