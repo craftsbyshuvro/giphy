@@ -22,23 +22,42 @@ export class GifService {
     const options = {
       headers: this.headers
     }
-    return this.http.get(this.baseUrl + 'search?api_key='
+    return this.http.get(this.baseUrl + 'gifs/search?api_key='
       + this.apiKey
       + '&limit=' + paginationConfig.PerPageRecord
       + '&offset=' + paginationConfig.Offset
       + '&rating=G&lang=en&q=' + query, options);
   }
 
-  
+  getTrendingGifs(paginationConfig: GifPaginationModel) {
+    const options = {
+      headers: this.headers
+    }
+    return this.http.get(this.baseUrl + 'gifs/trending?api_key='
+      + this.apiKey
+      + '&limit=' + paginationConfig.PerPageRecord
+      + '&offset=' + paginationConfig.Offset
+      + '&rating=G&lang=en', options);
+  }
+
+
+  getTrendingSearchTerms() {
+    const options = {
+      headers: this.headers
+    }
+    return this.http.get(this.baseUrl + 'trending/searches?api_key='
+      + this.apiKey, options);
+  }
+
 
   getSearchKeywords(query: string) {
     const options = {
       headers: this.headers
     }
-    return this.http.get(this.baseUrl + 'search/tags?api_key='
+    return this.http.get(this.baseUrl + 'gifs/search/tags?api_key='
       + this.apiKey + '&q='
       + query + '&limit=5&offset=0', options);
-  }  
+  }
   
   getAllData() {
     const options = {

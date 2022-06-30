@@ -1,0 +1,13 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\app",
+    "\\src\\app\\giphy",
+    "\\src\\app\\giphy\\models",
+    "\\src\\app\\giphy\\services",
+    "\\src\\environments"
+  ],
+  "SelectedNode": "\\src\\app\\giphy\\models\\GifPaginationModel.ts",
+  "PreviewInSolutionExplorer": false
+}

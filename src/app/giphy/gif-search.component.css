@@ -11,3 +11,13 @@ body {
 .ng-autocomplete {
   width: 400px;
 }
+
+.trendingterm{
+    margin-left:8px;
+    margin-bottom: 5px;
+}
+
+.head-title{
+    background-color:blue;
+    color:white;
+}
