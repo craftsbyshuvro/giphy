@@ -86,6 +86,11 @@ export class GifSearchComponent implements OnInit {
   }
 
   onChangeSearch(val: string) {
+
+    if (val == undefined || val.length < 1) {
+      return;
+    }
+
     // This function triggers when input changes    
     this.gifService.getSearchKeywords(val).subscribe(
       response => {

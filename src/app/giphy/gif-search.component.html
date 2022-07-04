@@ -75,7 +75,7 @@
 
   </div>
 
-  <div class="text-center mt-3 h6">
+  <div class="text-center mt-3 h6 mb-4">
     <pagination-controls [ngClass]="{ 'd-none': _paginateionConfig.TotalRecords == undefined || _paginateionConfig.TotalRecords < 1}"
                          (pageChange)="getPage(_paginateionConfig.CurrentPage = $event)">
     </pagination-controls>
