@@ -15,8 +15,8 @@
         <div class="ng-autocomplete" [ngClass]="{ 'is-invalid': (isFormSubmitted && gifSearchForm.controls['inputText'].errors)}">
           <ng-autocomplete formControlName="inputText"
                            placeholder="Enter gif description to search"
-                           [data]="searchSuggestions"
-                           [searchKeyword]="'name'"
+                           [data]="_gifhySuggestedKeywords"
+                           [searchKeyword]="'Name'"
                            (selected)='selectEvent($event)'
                            (inputChanged)='onChangeSearch($event)'
                            [itemTemplate]="itemTemplate"
@@ -24,7 +24,7 @@
           </ng-autocomplete>
 
           <ng-template #itemTemplate let-item>
-            <a [innerHTML]="item.name"></a>
+            <a [innerHTML]="item.Name"></a>
           </ng-template>
 
           <ng-template #notFoundTemplate let-notFound>
@@ -66,8 +66,8 @@
       <div *ngFor="let item of _gifData | paginate: { itemsPerPage: _paginateionConfig.PerPageRecord, currentPage: _paginateionConfig.CurrentPage, totalItems: _paginateionConfig.TotalRecords }" class="col-3 ml-1">
         <div class="card">
           <div class="card-body text-center">
-            <img src="{{item.img_url}}" />
-            <p class="text-center"><b>{{item.title}}</b></p>
+            <img src="{{item.ImageURL}}" />
+            <p class="text-center"><b>{{item.Title}}</b></p>
           </div>
         </div>
       </div>

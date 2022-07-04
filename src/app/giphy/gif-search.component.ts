@@ -2,8 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { APIResponseModel } from '../common/models/APIResponseModel';
+import { GifhySuggestedKeywordsModel } from './models/GifhySuggestedKeywordsModel';
 import { GifModel } from './models/GifModel';
 import { GifPaginationModel } from './models/GifPaginationModel';
+import { GiphyListModel } from './models/GiphyListModel';
 import { GifService } from './services/GifService';
 
 @Component({
@@ -20,8 +23,12 @@ export class GifSearchComponent implements OnInit {
   public inputText: string = '';
   public isFormSubmitted: boolean = false;
 
-  public searchSuggestions: string[] = []
   public trendingSearchTerms: string[] = []
+
+  public _responseData: APIResponseModel = new APIResponseModel();
+  public _githyListModel: GiphyListModel = new GiphyListModel();
+  public _gifhySuggestedKeywords: Array<GifhySuggestedKeywordsModel> = new Array<GifhySuggestedKeywordsModel>();
+
 
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -63,20 +70,18 @@ export class GifSearchComponent implements OnInit {
       return;
     }
 
-    // When object property doesn't have value we are getting the value directly from the form
-    if (this.gifSearchForm.value['inputText']?.name == undefined) {
-      this.inputText = this.gifSearchForm.value['inputText'];
-    } else {
-      this.inputText = this.gifSearchForm.value['inputText']?.name;
-    }
+    debugger;
+    
+    // Getting Input value
+    this.inputText = this.gifSearchForm.value['inputText'];
 
     this.resetPagination();
     this.getGiphy(this.inputText);
   }
 
-  selectEvent(item: string) {
+  selectEvent(searSuggestion: GifhySuggestedKeywordsModel) {
     // This function is called when selected item is changed
-    this.gifSearchForm.get('inputText').setValue(item);
+    this.gifSearchForm.get('inputText').setValue(searSuggestion.Name);
     this.onSearch();
   }
 
@@ -84,13 +89,14 @@ export class GifSearchComponent implements OnInit {
     // This function triggers when input changes    
     this.gifService.getSearchKeywords(val).subscribe(
       response => {
-        let resData = JSON.parse(JSON.stringify(response));
-        let keys = resData.data;
-
-        this.searchSuggestions = keys.map((item: any) => ({
-          name: item.name
-        }));
-
+        //this._responseData = JSON.parse(JSON.stringify(response));
+        this._responseData = response;
+        if (this._responseData.ResponseStatus) {
+          this._gifhySuggestedKeywords = JSON.parse(this._responseData.BusinessData)
+        }
+        else {
+          alert(this._responseData.ErrMsg);
+        }
       },
       error => {
         alert(error.message);
@@ -125,16 +131,16 @@ export class GifSearchComponent implements OnInit {
     // Calling service to fetch data by desc
     this.gifService.getGifByName(query, this._paginateionConfig).subscribe(
       response => {
-        let resData = JSON.parse(JSON.stringify(response));
-        let gifs = resData.data;
-
-        this._gifData = gifs.map((item: any) => ({
-          title: item.title,
-          img_url: item.images.preview_webp.url
-        }));
-
-        this._paginateionConfig.TotalRecords = resData.pagination.total_count;
-
+        //this._responseData = JSON.parse(JSON.stringify(response));
+        this._responseData = response;
+          if (this._responseData.ResponseStatus) {
+            this._githyListModel = JSON.parse(this._responseData.BusinessData)
+            this._gifData = this._githyListModel.GiphyList;
+            this._paginateionConfig.TotalRecords = this._githyListModel.TotalRecords;
+          }
+          else {
+            alert(this._responseData.ErrMsg);
+          }
       },
       error => {
         alert(error.message);
@@ -149,16 +155,16 @@ export class GifSearchComponent implements OnInit {
     // Calling service to fetch trending data
     this.gifService.getTrendingGifs(this._paginateionConfig).subscribe(
       response => {
-        let resData = JSON.parse(JSON.stringify(response));
-        let gifs = resData.data;
-
-        this._gifData = gifs.map((item: any) => ({
-          title: item.title,
-          img_url: item.images.preview_webp.url
-        }));
-
-        this._paginateionConfig.TotalRecords = resData.pagination.total_count;
-
+          //this._responseData = JSON.parse(JSON.stringify(response));
+          this._responseData = response;
+          if (this._responseData.ResponseStatus) {
+            this._githyListModel = JSON.parse(this._responseData.BusinessData)
+            this._gifData = this._githyListModel.GiphyList;
+            this._paginateionConfig.TotalRecords = this._githyListModel.TotalRecords;
+          }
+          else {
+            alert(this._responseData.ErrMsg);
+          }
       },
       error => {
         alert(error.message);
@@ -174,8 +180,14 @@ export class GifSearchComponent implements OnInit {
     // Calling service to fetch trending data
     this.gifService.getTrendingSearchTerms().subscribe(
       response => {
-        let resData = JSON.parse(JSON.stringify(response));
-        this.trendingSearchTerms = resData.data;
+        //this._responseData = JSON.parse(JSON.stringify(response));
+        this._responseData = response;
+        if (this._responseData.ResponseStatus) {
+          this.trendingSearchTerms = JSON.parse(this._responseData.BusinessData)
+        }
+        else {
+          alert(this._responseData.ErrMsg);
+        }
       },
       error => {
         alert(error.message);

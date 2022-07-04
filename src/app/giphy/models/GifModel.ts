@@ -1,4 +1,4 @@
 export class GifModel {
-  title: string = '';
-  img_url: string = '';
+  Title: string = '';
+  ImageURL: string = '';
 }

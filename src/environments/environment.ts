@@ -5,8 +5,7 @@
 export const environment = {
   production: false,
   // This should be set to true when you are ready to deploy your app to production
-  GIPHY_API_KEY: '6A6JipZfxTtr31Z8h1Ypxj6CkIvpxHD7',
-  APIBaseURL: 'https://api.giphy.com/v1/'
+  BackEndBaseURL: 'https://localhost:7224/api/'
 };
 
 /*
